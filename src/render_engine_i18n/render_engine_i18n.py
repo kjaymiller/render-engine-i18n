@@ -1,3 +1,4 @@
+import pdb
 from pathlib import Path
 from render_engine.hookspecs import hook_impl
 from render_engine.site import Site
@@ -13,11 +14,23 @@ class RenderEngineI18n:
     ):
         """Called after a page is rendered."""
         for lang in settings["RenderEngineI18n"]["languages"]:
-            class LangPage(page):
-                content_path = Path(settings["RenderEngineI18n"]["languages_path"]).joinpath(lang).joinpath(page.content_path).name
-                Parser = page.Parser
-            
-            lang_page = LangPage()
+            path = (
+                Path(settings["RenderEngineI18n"]["languages_path"])
+                / Path(lang)
+                / Path(page.content_path).name
+            )
+            if lang == settings["RenderEngineI18n"]["default_language"]:
+                path = Path(page.content_path)
+            parser = page.Parser
             route = Path(lang)/settings["route"]
-            print(route)
-            site._render_output(route = route, page = lang_page)
+            class LangPage(page):
+                content_path = path
+                Parser = parser
+
+            lang_page = LangPage()
+            content = lang_page._render_content(engine=site.engine)
+            
+            for route in lang_page.routes:
+                lang_route = site.output_path/Path(lang)/route/lang_page.path_name
+                lang_route.parent.mkdir(parents=True, exist_ok=True)
+                lang_route.write_text(content)

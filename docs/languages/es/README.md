@@ -1,4 +1,8 @@
-Complemento que agrega internacionalización
+---
+title: Readme
+---
+
+# Complemento que agrega internacionalización
 
 Este es el plan inicial
 Tipo: Complemento
