@@ -9,13 +9,14 @@ description = "Internationalization and Localization for Render Engine"
 readme = "README.md"
 
 dependencies = [
-    'render-engine==2023.9.1b3'
+    'render-engine==2023.10.1'
     ]
 
 [project.optional-dependencies]
 dev = [
     "black",
     "pytest",
+    "ruff",
     ]
 
 [tool.setuptools_scm]
